@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "bin": {
-    "anydoor": "bin/anydoor"
+    "anydoor": "bin/wherever"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,7 +13,7 @@
     "name": "Coyeah",
     "github": "https://github.com/Coyeah",
   },
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "babel-eslint": "^8.2.6",
     "eslint": "^5.4.0"
