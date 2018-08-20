@@ -1,10 +1,10 @@
 {
   "name": "wherever",
   "version": "0.1.0",
-  "description": "",
+  "description": "tiny nodejs web server",
   "main": "app.js",
   "bin": {
-    "anydoor": "bin/wherever"
+    "wherever": "bin/wherever"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,8 +12,20 @@
   "author": {
     "name": "Coyeah",
     "github": "https://github.com/Coyeah",
+    "email": "coyeah_chen@outlook.com"
   },
-  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Coyeah/wherever.git"
+  },
+  "keywords": [
+    "static",
+    "webserver"
+  ],
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Coyeah/wherever/issues"
+  },
   "devDependencies": {
     "babel-eslint": "^8.2.6",
     "eslint": "^5.4.0"
