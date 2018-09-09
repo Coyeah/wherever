@@ -50,19 +50,31 @@ module.exports = async function(req, res, filePath, config) {
     } else if (stats.isDirectory()) {
       const files = await readdir(filePath);
       res.statusCode = 200;
-      res.setHeader('Content-Type', 'text/html');
-      const dir = path.relative(config.root, filePath);
-      const data = {
-        files: files.map(value => {
-          return {
-            file: value,
-            icon: mime(value),
-          }
-        }),
-        title: path.basename(filePath),
-        dir: dir ? `/${dir}` : '',
+
+      const re = /\.wh/g;
+      const target = files.filter(value => {
+        return re.test(value);
+      });
+
+      if (target.length !== 0) {
+        res.setHeader('Content-Type', 'text/json');
+        const data = fs.readFileSync(path.join(filePath, './index.wh'));
+        res.end(data);
+      } else {
+        res.setHeader('Content-Type', 'text/html');
+        const dir = path.relative(config.root, filePath);
+        const data = {
+          files: files.map(value => {
+            return {
+              file: value,
+              icon: mime(value),
+            };
+          }),
+          title: path.basename(filePath),
+          dir: dir ? `/${dir}` : '',
+        };
+        res.end(template(data));
       }
-      res.end(template(data));
     }
   } catch (e) {
     console.error(e);
@@ -70,4 +82,4 @@ module.exports = async function(req, res, filePath, config) {
     res.setHeader('Content-Type', 'text/plath');
     res.end(`${filePath} is not a directory or file!\n ${e}`);
   }
-}
+};

@@ -10,16 +10,41 @@
       margin: 30px;
     }
 
+    div {
+      border: 3px solid #eee;
+      border-radius: 10px;
+      box-sizing: border-box;
+      padding: 20px 30px;
+    }
+
     a {
       display: block;
       font-size: 16px;
-      padding: 5px 0;
+      margin: 15px 0;
+      transition: 0.5s padding;
+    }
+
+    a:link, a:visited {
+      text-decoration: none;
+      color: #000;
+    }
+
+    a:hover, a:active {
+      padding-left: 15px;
+      font-weight: bold;
+    }
+
+    span {
+      padding-left: 20px;
+      font-weight: normal;
     }
   </style>
 </head>
 <body>
+  <div>
   {{#each files}}
-    <a href="{{../dir}}/{{file}}">{{file}}  [{{icon}}]</a>
+    <a href="{{../dir}}/{{file}}">{{file}}<span>[{{icon}}]<span></a>
   {{/each}}
+  </div>
 </body>
 </html>

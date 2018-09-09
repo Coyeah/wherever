@@ -10,4 +10,4 @@ module.exports = {
     lastModified: true,
     etag: true,
   }
-}
+};

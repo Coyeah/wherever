@@ -19,7 +19,7 @@ const mimeTypes = {
   'wma': 'audio/x-ms-wma',
   'wnv': 'video/x-ms-wmv',
   'xml': 'text/xml',
-}
+};
 
 
 module.exports = (filePath) => {
@@ -30,4 +30,4 @@ module.exports = (filePath) => {
   }
 
   return mimeTypes[ext] || mimeTypes['txt'];
-}
+};

@@ -2,6 +2,8 @@
 
 Tiny NodeJS Static Web Server.
 
+Provide mock data, the agent can simulate the real API to get the data.
+
 # Install
 
 ```
@@ -19,3 +21,9 @@ wherever -h localhost # 设置 host 为 localhost
 
 wherever -d /usr # 设置根目录为 /usr
 ```
+
+# About mock
+
+Use `index.wh` in the specified folder.
+
+The data format is `JSON`.
