@@ -1,4 +1,4 @@
-const {cache} = require('../config/defaultConfig');
+const { cache } = require('../config/defaultConfig');
 
 function refreshRes (stats, res) {
   const {maxAge, expires, cacheControl, lastModified, etag} = cache;
@@ -16,7 +16,8 @@ function refreshRes (stats, res) {
   }
 
   if (etag) {
-    res.setHeader('ETag', `${stats.size}-${stats.mtime}`);
+    // res.setHeader('ETag', `${stats.size}-${stats.mtime}`);
+    res.setHeader('ETag', `${stats.size}`);
   }
 }
 

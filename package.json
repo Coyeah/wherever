@@ -1,6 +1,6 @@
 {
   "name": "wherever",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "tiny nodejs web server",
   "main": "app.js",
   "bin": {
@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^8.2.6",
-    "eslint": "^5.4.0"
+    "eslint": "^5.5.0"
   },
   "dependencies": {
     "chalk": "^2.4.1",

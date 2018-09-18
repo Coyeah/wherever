@@ -2,16 +2,21 @@ module.exports = {
   "env": {
     "browser": true,
     "node": true,
-    "commonjs": true
+    "commonjs": true,
+    "es6": true
   },
   "extends": "eslint:recommended",
   "parserOptions": {
-    "ecmaVersion": 6
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    },
   },
   "parser": "babel-eslint",
   "rules": {
     "no-console": ["error", {
-      allow: ["warn", "error", "info"]
+      "allow": ["warn", "error", "info"]
     }],
     "indent": [
       "error",
