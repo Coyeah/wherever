@@ -18,6 +18,11 @@ const argv = yargs
     describe: 'root path',
     default: process.cwd()
   })
+  .option('f', {
+    alias: 'mode',
+    describe: 'server mode',
+    default: 'folder'
+  })
   .version()
   .alias('v', 'version')
   .help()

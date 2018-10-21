@@ -1,6 +1,7 @@
 const http = require('http');
-const chalk = require('chalk');
 const path = require('path');
+const chalk = require('chalk');
+
 const conf = require('./config/defaultConfig');
 const route = require('./helper/route');
 const openUrl = require('./helper/openUrl');

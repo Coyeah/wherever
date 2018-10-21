@@ -1,7 +1,7 @@
 const { cache } = require('../config/defaultConfig');
 
 function refreshRes (stats, res) {
-  const {maxAge, expires, cacheControl, lastModified, etag} = cache;
+  const { maxAge, expires, cacheControl, lastModified, etag} = cache;
 
   if (expires) {
     res.setHeader('Expires', (new Date(Date.now() + maxAge * 1000)).toUTCString());
@@ -16,8 +16,7 @@ function refreshRes (stats, res) {
   }
 
   if (etag) {
-    // res.setHeader('ETag', `${stats.size}-${stats.mtime}`);
-    res.setHeader('ETag', `${stats.size}`);
+    res.setHeader('ETag', `${stats.size}-${stats.mtime.toUTCString()}`);
   }
 }
 
@@ -25,19 +24,13 @@ module.exports = function isFresh(stats, req, res) {
   refreshRes(stats, res);
 
   const lastModified = req.headers['if-modified-since'];
-  const etag = req.headers['if-none-match'];
+  const etag = req.headers['is-none-match'];
 
-  if (!lastModified && !etag) {
-    return false;
-  }
+  if (!lastModified && !etag) return false;
 
-  if (lastModified && lastModified !== res.getHeader('Last-Modified')) {
-    return false;
-  }
+  if (lastModified && lastModified !== res.getHeader('Last-Modified')) return false;
 
-  if (etag && etag != res.getHeader('ETag')) {
-    return false;
-  }
+  if (etag && etag != res.getHeader('ETag')) return false;
 
   return true;
 };
