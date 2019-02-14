@@ -1,6 +1,6 @@
-const fs = require('fs');
+const fs = require('fs');  // File System[https://nodejs.org/api/fs.html]
 const path = require('path');
-const promisify = require('util').promisify;  // 程序使用promisify()转换基于回调函数的方法fs.readFile()成一个返回promise的一个函数
+const promisify = require('util').promisify;  // 程序使用 promisify() 转换基于回调函数的方法 fs.readFile() 成一个返回promise的一个函数
 const stat = promisify(fs.stat);  // fs.Stats 对象提供了一个文件的信息
 const readdir = promisify(fs.readdir);  // fs.readdir 读取一个目录的内容
 const Handlebars = require('handlebars');
@@ -21,18 +21,14 @@ module.exports = async function (req, res, filePath, config) {
       const contentType = mime(filePath);  // 获取文件类型识别
       res.setHeader('Content-Type', `${contentType}; charset=utf-8`);
 
-      if (isFresh(stats, req, res)) {
+      if (isFresh(stats, req, res)) {  // 是否有缓存
         res.statusCode = 304;
         res.end();
         return;
       }
 
       let rs;
-      const {
-        code,
-        start,
-        end
-      } = range(stats.size, req, res);  // 判断是否断点续连，若否则 code = 200，start & end 为空
+      const { code, start, end } = range(stats.size, req, res);  // 判断是否断点续连，若否则 code = 200，start & end 为空
 
       if (code === 200) {
         res.statusCode = 200;
@@ -59,11 +55,11 @@ module.exports = async function (req, res, filePath, config) {
         files: files.map(value => {
           return {
             file: value,
-            icon: mime(value)
+            icon: value.split('.').length === 1 ? 'files-o' : 'file-text-o'
           };
         }),
         title: path.basename(filePath),
-        dir: dir ? `/${dir}`: ''
+        dir: dir ? `/${dir}` : ''
       };
       res.end(template(data));
     }

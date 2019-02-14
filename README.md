@@ -2,7 +2,6 @@
 
 Tiny NodeJS Static Web Server.
 
-Provide mock data, the agent can simulate the real API to get the data.
 
 # Install
 
@@ -13,17 +12,15 @@ npm i -g wherever
 # How to use
 
 ```
-wherever # 把当前文件夹作为静态资源服务器的根目录
+wherever # Make the current folder the root of the static resource server
 
-wherever -p 9000 # 设置端口号为 9000
+wherever -p 9000 # Set the port number to 9000
 
-wherever -h localhost # 设置 host 为 localhost
+wherever -h localhost # Set host to localhost
 
-wherever -d /usr # 设置根目录为 /usr
+wherever -d /usr # Set the root directory to /usr
 ```
 
-# About mock
+# Bug ?
 
-Use `index.wh` in the specified folder.
-
-The data format is `JSON`.
+If something doesn’t work, please [file an issue](https://github.com/Coyeah/wherever/issues).

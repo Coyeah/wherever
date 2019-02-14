@@ -479,10 +479,9 @@ const mimeTypes = {  // 文件类型识别
 
 module.exports = (filePath) => {
   let ext = path.extname(filePath).split('.').pop().toLowerCase();
-
   if (!ext) {
     ext = filePath;
   }
-
+  console.log(ext);
   return mimeTypes[ext] || mimeTypes['txt'];
 };

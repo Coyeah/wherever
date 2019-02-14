@@ -5,23 +5,32 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>{{title}}</title>
+  <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <style>
-    body {
-      margin: 30px;
+    html, body {
+      background-color: #eee;
+      font-size: 16px;
     }
 
-    div {
-      border: 3px solid #eee;
-      border-radius: 10px;
+    * {
       box-sizing: border-box;
-      padding: 20px 30px;
+      padding: 0;
+      margin: 0;
+    }
+
+    .container {
+      border: 5px solid #31A67B;
+      background-color: #f8f8f8;
+      border-radius: 10px;
+      padding: 30px;
+      margin: 30px 30%;
+      box-shadow: 3px 3px 3px #888;
     }
 
     a {
-      display: block;
-      font-size: 16px;
-      margin: 15px 0;
+      font-size: 1rem;
       transition: 0.5s padding;
+      margin-left: 30px;
     }
 
     a:link, a:visited {
@@ -34,16 +43,27 @@
       font-weight: bold;
     }
 
-    span {
-      padding-left: 20px;
-      font-weight: normal;
+    .flex {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      margin: 3px 0;
+    }
+
+    .back {
+      margin-top: 10px;
+      text-align: right;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <div>
+  <div class="container">
   {{#each files}}
-    <a href="{{../dir}}/{{file}}">{{file}}<span>[{{icon}}]<span></a>
+    <div class="flex">
+      <div style="width: 10px;"><i class="fa fa-{{icon}}"></i></div>
+      <div><a href="{{../dir}}/{{file}}">{{file}}</a></div>
+    </div>
   {{/each}}
   </div>
 </body>

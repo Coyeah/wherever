@@ -1,7 +1,7 @@
 module.exports = (totalSize, req, res) => {
   const range = req.headers['range'];  // Range 断点续连
   if (!range) {
-    return {code: 200};
+    return { code: 200 };
   }
 
   // Range: bytes=[first byte pos]-[last byte pos]
@@ -10,7 +10,7 @@ module.exports = (totalSize, req, res) => {
   const start = sizes[1] || totalSize - end;
 
   if (start > end || start < 0 || end > totalSize) {
-    return {code: 200};
+    return { code: 200 };
   }
 
   res.setHeader('Accept-Rangs', 'bytes');

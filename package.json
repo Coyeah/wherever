@@ -1,39 +1,38 @@
 {
   "name": "wherever",
-  "version": "0.2.4",
-  "description": "tiny nodejs web server",
+  "version": "0.2.5",
+  "description": "Tiny nodejs web server",
   "main": "app.js",
   "bin": {
     "wherever": "bin/wherever"
   },
   "scripts": {
-    "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": {
-    "name": "Coyeah",
-    "github": "https://github.com/Coyeah",
-    "email": "coyeah_chen@outlook.com"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/app.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Coyeah/wherever.git"
   },
   "keywords": [
+    "tiny",
     "static",
+    "nodejs",
     "webserver"
   ],
-  "license": "ISC",
+  "author": {
+    "name": "Coyeah",
+    "github": "https://github.com/Coyeah",
+    "email": "Coyeah_chen@outlook.com"
+  },
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Coyeah/wherever/issues"
   },
-  "devDependencies": {
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.7.0"
-  },
+  "homepage": "https://github.com/Coyeah/wherever#readme",
   "dependencies": {
-    "chalk": "^2.4.1",
-    "handlebars": "^4.0.12",
-    "yargs": "^12.0.2"
+    "chalk": "^2.4.2",
+    "handlebars": "^4.1.0",
+    "yargs": "^13.1.0"
   }
 }
