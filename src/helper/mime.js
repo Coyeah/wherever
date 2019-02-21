@@ -482,6 +482,5 @@ module.exports = (filePath) => {
   if (!ext) {
     ext = filePath;
   }
-  console.log(ext);
   return mimeTypes[ext] || mimeTypes['txt'];
 };

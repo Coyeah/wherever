@@ -51,13 +51,17 @@ module.exports = async function (req, res, filePath, config) {
 
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
       const dir = path.relative(config.root, filePath); // 该方法返回第二个路径相对于第一个路径的相对路径
+      let filesData = [];
+      for (let i = 0; i < files.length; i++) {
+        const value = files[i];
+        const target = await stat(path.join(filePath, value));
+        filesData.push({
+          file: value,
+          icon: target.isFile() ? 'file-text-o' : 'folder-o',
+        })
+      }
       const data = {
-        files: files.map(value => {
-          return {
-            file: value,
-            icon: value.split('.').length === 1 ? 'files-o' : 'file-text-o'
-          };
-        }),
+        files: filesData,
         title: path.basename(filePath),
         dir: dir ? `/${dir}` : ''
       };
