@@ -15,14 +15,19 @@ class Server {
 
   start() {
     const server = http.createServer((req, res) => {
-      const filePath = path.join(this.conf.root, req.url);
+      let filePath = path.join(this.conf.root, req.url);
+      if (this.conf.server) {
+        filePath = filePath.split('?')[0];
+      }
       route(req, res, filePath, this.conf);
     });
 
     server.listen(this.conf.port, this.conf.hostname, () => {
       const addr = `http://${this.conf.hostname}:${this.conf.port}`;
       console.log(`${chalk.whiteBright('[wherever]')} Server started at ${chalk.green(addr)}`);
-      // openUrl(addr);
+      if (this.conf.open) {
+        openUrl(addr);
+      }
     });
   }
 }

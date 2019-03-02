@@ -2,7 +2,6 @@
 
 Tiny NodeJS Static Web Server.
 
-
 # Install
 
 ```
@@ -19,6 +18,10 @@ wherever -p 9000 # Set the port number to 9000
 wherever -h localhost # Set host to localhost
 
 wherever -d /usr # Set the root directory to /usr
+
+wherever --open # Open the website
+
+wherever -s # Static server mode, ignore the parameters of the get request
 ```
 
 # Bug ?

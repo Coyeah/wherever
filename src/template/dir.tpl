@@ -43,7 +43,7 @@
 
     .container a {
       font-size: 1rem;
-      transition: 0.5s padding;
+      transition: 0.2s all;
     }
 
     .container a:link, .container a:visited {
@@ -52,8 +52,7 @@
     }
 
     .container a:hover, .container a:active {
-      padding-left: 15px;
-      font-weight: bold;
+      text-decoration: none;
       color: #31A67B;
     }
 
@@ -61,6 +60,22 @@
       display: inline-block;
       width: 23%;
       margin-bottom: 10px;
+    }
+
+    .box a {
+      margin-left: 10px;
+    }
+
+    @media screen and (max-width: 1000px) {
+      .box {
+        width: 48%;
+      }
+    }
+
+    @media screen and (max-width: 600px) {
+      .box {
+        width: 98%;
+      }
     }
 
     a {
@@ -85,14 +100,13 @@
   <div class="container">
   {{#each files}}
     <div class="box">
-      <span><i class="fa fa-{{icon}}"></i></span>
-      <span><a href="{{../dir}}/{{file}}">{{file}}</a></span>
+      <span><i class="fa fa-{{icon}}"></i><a href="{{../dir}}/{{file}}">{{file}}</a></span>
     </div>
   {{/each}}
   </div>
   <div class="footer">
-    <p>Copyright 2018 &copy; Created By Coyeah_chen@outlook.com</p>
-    <p>Github: [ <a href="https://github.com/Coyeah/wherever" target="_blank">https://github.com/Coyeah/wherever</a> ]</p>
+    <p>Copyright 2018 &copy; Created By Coyeah</p>
+    <p>Github: [ <a href="https://github.com/Coyeah/wherever" target="_blank">Project Location</a> ]</p>
   </div>
 </body>
 </html>

@@ -18,8 +18,22 @@ const argv = yargs
     describe: '根目录',
     default: process.cwd(),
   })
-  .version()
+  .option('s', {
+    alias: 'server',
+    describe: '静态资源服务器模式',
+    type: 'boolean',
+    default: false,
+    demand: true,
+  })
+  .option('open', {
+    alias: 'open',
+    describe: '打开网址',
+    type: 'boolean',
+    default: false,
+    demand: true,
+  })
   .alias('v', 'version')
+  .version()
   .help()
   .argv;
 
