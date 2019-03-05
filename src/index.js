@@ -25,7 +25,7 @@ const argv = yargs
     default: false,
     demand: true,
   })
-  .option('open', {
+  .option('o', {
     alias: 'open',
     describe: '打开网址',
     type: 'boolean',
