@@ -8,7 +8,7 @@ const argv = yargs
     describe: '端口号',
     default: 3000
   })
-  .option('h', {
+  .option('i', {
     alias: 'hostname',
     describe: '服务器IP地址',
     default: '127.0.0.1',
@@ -28,6 +28,13 @@ const argv = yargs
   .option('o', {
     alias: 'open',
     describe: '打开网址',
+    type: 'boolean',
+    default: false,
+    demand: true,
+  })
+  .option('d', {
+    alias: 'download',
+    describe: '文件下载模式',
     type: 'boolean',
     default: false,
     demand: true,

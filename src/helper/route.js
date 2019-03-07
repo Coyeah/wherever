@@ -18,6 +18,14 @@ module.exports = async function (req, res, filePath, config) {
   try {
     const stats = await stat(filePath);
     if (stats.isFile()) {  // 判断路径指向是否为文件
+      if (config.download) {
+        res.setHeader('Content-Type', 'application/octet-stream');
+        res.setHeader('Content-Disposition', `attachment; filename=${filePath.split('\\').pop()}`);
+        res.setHeader('Content-Length', stats.size);
+        fs.createReadStream(filePath).pipe(res);
+        return;
+      }
+
       const contentType = mime(filePath);  // 获取文件类型识别
       res.setHeader('Content-Type', `${contentType}; charset=utf-8`);
 
