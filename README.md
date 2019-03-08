@@ -19,9 +19,13 @@ wherever -h localhost # Set host to localhost
 
 wherever -d /usr # Set the root directory to /usr
 
-wherever --open # Open the website
+wherever -0 # Open the website
 
 wherever -s # Static server mode, ignore the parameters of the get request
+
+wherever -d # File download mode, it will download the file locally for the file path
+
+wherever -i # Image base64 mode, convert the image to base64 and present it as text.
 ```
 
 # Bug ?
