@@ -18,15 +18,21 @@ module.exports = async function (req, res, filePath, config) {
   try {
     const stats = await stat(filePath);
     if (stats.isFile()) {  // 判断路径指向是否为文件
-      if (config.download) {
+      if (config.download) {  // 文件下载模式
         res.setHeader('Content-Type', 'application/octet-stream');
         res.setHeader('Content-Disposition', `attachment; filename=${filePath.split('\\').pop()}`);
         res.setHeader('Content-Length', stats.size);
         fs.createReadStream(filePath).pipe(res);
         return;
       }
-
       const contentType = mime(filePath);  // 获取文件类型识别
+      if (config.image && contentType.indexOf('image/') === 0) { // 图片base64模式
+        const imageData = fs.readFileSync(filePath);
+        const imageBase64 = imageData.toString("base64");
+        res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+        res.end(`data:${contentType};base64,${imageBase64}`);
+        return;
+      }
       res.setHeader('Content-Type', `${contentType}; charset=utf-8`);
 
       if (isFresh(stats, req, res)) {  // 是否有缓存
