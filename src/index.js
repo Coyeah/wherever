@@ -11,7 +11,6 @@ const argv = yargs
   .option('n', {
     alias: 'hostname',
     describe: '服务器IP地址',
-    default: '127.0.0.1',
   })
   .option('r', {
     alias: 'root',

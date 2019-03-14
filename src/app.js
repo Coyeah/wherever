@@ -17,7 +17,7 @@ class Server {
     const server = http.createServer((req, res) => {
       let filePath = path.join(this.conf.root, req.url);
       if (this.conf.server) {
-        filePath = filePath.split('?')[0];
+        filePath = filePath.split('?')[0].split('/#/')[0];
       }
       route(req, res, filePath, this.conf);
     });
