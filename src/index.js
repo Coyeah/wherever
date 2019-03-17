@@ -45,6 +45,13 @@ const argv = yargs
     default: false,
     demand: true,
   })
+  .option('u', {
+    alias: 'upload',
+    describe: '文件上传模式',
+    type: 'boolean',
+    default: false,
+    demand: true,
+  })
   .alias('v', 'version')
   .version()
   .help()
