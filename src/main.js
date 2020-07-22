@@ -1,38 +1,40 @@
+'use strict'
+
 const fs = require('fs');  // File System[https://nodejs.org/api/fs.html]
 const path = require('path');
 const promisify = require('util').promisify;  // 程序使用 promisify() 转换基于回调函数的方法 fs.readFile() 成一个返回promise的一个函数
 const stat = promisify(fs.stat);  // fs.Stats 对象提供了一个文件的信息
 const readdir = promisify(fs.readdir);  // fs.readdir 读取一个目录的内容
+
 const Handlebars = require('handlebars');
+const mime = require('mime-types');
 
-const mime = require('./mime');
-const isFresh = require('./cache');
-const range = require('./range');
-const compress = require('./compress');
+const createDownloadConfig = require('./config/download.config');
+const range = require('./utils/range');
+const compress = require('./utils/compress');
+const isFresh = require('./utils/cache');
 
-const tplPath = path.join(__dirname, '../template/dir.tpl');
+const tplPath = path.join(__dirname, './template/dir.tpl');
 const source = fs.readFileSync(tplPath, 'utf-8');
 const template = Handlebars.compile(source);
 
 module.exports = async function (req, res, filePath, config) {
   try {
     const stats = await stat(filePath);
-    if (stats.isFile()) {  // 判断路径指向是否为文件
+    if (stats.isFile()) {
       if (config.download) {  // 文件下载模式
-        res.setHeader('Content-Type', 'application/octet-stream');
-        res.setHeader('Content-Disposition', `attachment; filename=${filePath.split('\\').pop()}`);
-        res.setHeader('Content-Length', stats.size);
+        const downloadConfig = createDownloadConfig({
+          filename: filePath.split('\\').pop(),
+          size: stats.size,
+        });
+        Object.keys(downloadConfig).map(key => {
+          res.setHeader(key, downloadConfig[key]);
+        });
         fs.createReadStream(filePath).pipe(res);
         return;
       }
-      const contentType = mime(filePath);  // 获取文件类型识别
-      if (config.image && contentType.indexOf('image/') === 0) { // 图片base64模式
-        const imageData = fs.readFileSync(filePath);
-        const imageBase64 = imageData.toString("base64");
-        res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-        res.end(`data:${contentType};base64,${imageBase64}`);
-        return;
-      }
+
+      const contentType = mime.lookup(filePath);  // 获取文件类型识别
       res.setHeader('Content-Type', `${contentType}; charset=utf-8`);
 
       if (isFresh(stats, req, res)) {  // 是否有缓存
@@ -62,28 +64,31 @@ module.exports = async function (req, res, filePath, config) {
     } else if (stats.isDirectory()) {  // 判断路径指向是否为文件目录，若无缓存则之间添加缓存
       const files = await readdir(filePath);
       res.statusCode = 200;
-
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
-      const dir = path.relative(config.root, filePath); // 该方法返回第二个路径相对于第一个路径的相对路径
-      let filesData = [];
-      for (let i = 0; i < files.length; i++) {
+
+      const dir = path.relative(config.root, filePath);
+      let fileData = [];
+      for (let i = 0; i < files.length; ++i) {
         const value = files[i];
         const target = await stat(path.join(filePath, value));
-        filesData.push({
+        fileData.push({
           file: value,
           icon: target.isFile() ? 'file-text-o' : 'folder-o',
-        })
+        });
       }
+
       const data = {
-        files: filesData,
+        files: fileData,
         title: path.basename(filePath),
         dir: dir ? `/${dir}` : ''
-      };
+      }
       res.end(template(data));
+    } else {
+      throw Error();
     }
   } catch (err) {
     console.error(err);
     res.statusCode = 404;
-    res.end(`${filePath} is not a directory or file!\n ${err}`);
+    res.end(`${filePath} is not a directory or file! \n ${err}`);
   }
-};
+}

@@ -2,40 +2,35 @@
 
 Tiny NodeJS Static Web Server.
 
-Simple use simple play. Start a server for you right away.
+一个微型静态服务器（基于 NodeJS 原生）。
 
-```
-npm isntall wherever -g
-```
+## 安装
 
-## Use it
-
-```
-wherever    # Make the current folder the root of the static resource server
+```bash
+npm install wherever -g
 ```
 
-### Params
+## 参数的使用
 
++ -p, --port [string]: 指定端口号
++ -r, --root [string]: 指定根目录
++ -s, --server [boolean]: 静态资源服务器模式
++ -o, --open [boolean]: 启动是否打开网页
++ -d, --download [boolean]: 文件下载模式
++ -c, --config [string]: 指定配置文件
+
+## 配置文件格式
+
+```json
+{
+  "port": "number",
+  "main": "string",
+  "root": "string",
+}
 ```
-wherever -p 9000        # Set the port number to 9000
 
-wherever -n localhost   # Set host to localhost
+## If
 
-wherever -d /usr        # Set the root directory to /usr
+如果你喜欢，请给我一个小小的支持，为我的项目给个星星。 Star it >> [ [github project](https://github.com/Coyeah/wherever) ]
 
-wherever -o             # Open the website
-
-wherever -s             # Static server mode, ignore the parameters of the get request
-
-wherever -d             # File download mode, it will download the file locally for the file path
-
-wherever -i             # Image base64 mode, convert the image to base64 and present it as text.
-
-wherever -u             # File upload mode, upload files to the specified folder on the web page.
-```
-
-## If~
-
-If you like it. Please give me a little encouragement. Star it >> [ [github project](https://github.com/Coyeah/wherever) ]
-
-If something doesn’t work, please [file an issue](https://github.com/Coyeah/wherever/issues).
+如果有任何问题，感谢指出， [issue](https://github.com/Coyeah/wherever/issues)。

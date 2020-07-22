@@ -1,15 +1,12 @@
 {
   "name": "wherever",
-  "version": "0.3.4",
+  "version": "0.4.0",
   "description": "Tiny nodejs web server",
   "main": "app.js",
   "bin": {
     "wherever": "bin/wherever"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/app.js"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Coyeah/wherever.git"
@@ -18,7 +15,7 @@
     "tiny",
     "static",
     "nodejs",
-    "webserver"
+    "web_server"
   ],
   "author": {
     "name": "Coyeah",
@@ -31,8 +28,9 @@
   },
   "homepage": "https://github.com/Coyeah/wherever#readme",
   "dependencies": {
-    "chalk": "^2.4.2",
-    "handlebars": "^4.1.0",
-    "yargs": "^13.1.0"
+    "chalk": "^4.1.0",
+    "handlebars": "^4.7.6",
+    "mime-types": "^2.1.27",
+    "yargs": "^15.4.1"
   }
 }

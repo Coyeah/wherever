@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -7,7 +8,8 @@
   <title>{{title}}</title>
   <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <style>
-    html, body {
+    html,
+    body {
       background-color: #eee;
       font-size: 16px;
       position: relative;
@@ -28,8 +30,9 @@
       text-align: center;
     }
 
-    .footer p {
-      margin-bottom: 20px;
+    .footer, .footer > a {
+      font-size: 1rem;
+      line-height: 2rem;
     }
 
     .container {
@@ -46,12 +49,14 @@
       transition: 0.2s all;
     }
 
-    .container a:link, .container a:visited {
+    .container a:link,
+    .container a:visited {
       text-decoration: none;
       color: #000;
     }
 
-    .container a:hover, .container a:active {
+    .container a:hover,
+    .container a:active {
       text-decoration: none;
       color: #31A67B;
     }
@@ -84,29 +89,40 @@
       color: #31A67B;
     }
 
-    a:link, a:visited {
+    a:link,
+    a:visited {
       text-decoration: none;
       color: #31A67B;
     }
 
-    a:hover, a:active {
+    a:hover,
+    a:active {
       text-decoration: underline;
       color: #31A67B;
     }
   </style>
 </head>
+
 <body>
-  <h1 class="title">Wherever</h1>
+  <h1 class="title">wherever</h1>
   <div class="container">
-  {{#each files}}
+    {{#each files}}
     <div class="box">
       <span><i class="fa fa-{{icon}}"></i><a href="{{../dir}}/{{file}}">{{file}}</a></span>
     </div>
-  {{/each}}
+    {{/each}}
   </div>
   <div class="footer">
-    <p>Copyright 2018 &copy; Created By Coyeah</p>
-    <p>Github: [ <a href="https://github.com/Coyeah/wherever" target="_blank">Project Location</a> ]</p>
+    <div>Created By coyeah | <a href="https://github.com/Coyeah/wherever" target="_blank">github here</a></div>
+    <div>&copy; 2018<span id="copyright_end_time"></span></div>
   </div>
+  <script>
+    const date = new Date();
+    const year = date.getFullYear();
+    if (year !== 2018) {
+      document.getElementById('copyright_end_time').textContent = ' - ' + year;
+    }
+  </script>
 </body>
+
 </html>

@@ -1,4 +1,4 @@
-const { cache } = require('../config/defaultConfig');
+const { cache } = require('../config/wherever.default.config');
 
 function refreshRes (stats, res) {
   const { maxAge, expires, cacheControl, lastModified, etag } = cache;
