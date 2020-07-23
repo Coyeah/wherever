@@ -1,12 +1,27 @@
 {
   "name": "wherever",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Tiny nodejs web server",
   "main": "app.js",
   "bin": {
     "wherever": "bin/wherever"
   },
-  "scripts": {},
+  "scripts": {
+    "prettier": "node ./scripts/prettier.js",
+    "lint-staged": "lint-staged",
+    "precommit": "npm run lint-staged"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged --ignore-path=.prettierignore"
+    }
+  },
+  "lint-staged": {
+    "**/*.{js,ts,tsx,json,jsx,less}": [
+      "node ./scripts/prettier.js",
+      "git add ."
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Coyeah/wherever.git"
@@ -30,7 +45,15 @@
   "dependencies": {
     "chalk": "^4.1.0",
     "handlebars": "^4.7.6",
+    "http-proxy": "^1.18.1",
     "mime-types": "^2.1.27",
     "yargs": "^15.4.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.5.0",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
+    "prettier": "^2.0.5",
+    "pretty-quick": "^2.0.1"
   }
 }

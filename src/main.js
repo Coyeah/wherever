@@ -1,59 +1,71 @@
-'use strict'
+'use strict';
 
-const fs = require('fs');  // File System[https://nodejs.org/api/fs.html]
+const fs = require('fs'); // File System[https://nodejs.org/api/fs.html]
 const path = require('path');
-const promisify = require('util').promisify;  // 程序使用 promisify() 转换基于回调函数的方法 fs.readFile() 成一个返回promise的一个函数
-const stat = promisify(fs.stat);  // fs.Stats 对象提供了一个文件的信息
-const readdir = promisify(fs.readdir);  // fs.readdir 读取一个目录的内容
+const promisify = require('util').promisify; // 程序使用 promisify() 转换基于回调函数的方法 fs.readFile() 成一个返回promise的一个函数
+const stat = promisify(fs.stat); // fs.Stats 对象提供了一个文件的信息
+const readdir = promisify(fs.readdir); // fs.readdir 读取一个目录的内容
 
 const Handlebars = require('handlebars');
 const mime = require('mime-types');
+const chalk = require('chalk');
 
 const createDownloadConfig = require('./config/download.config');
 const range = require('./utils/range');
 const compress = require('./utils/compress');
 const isFresh = require('./utils/cache');
+const handleProxy = require('./utils/proxy');
 
 const tplPath = path.join(__dirname, './template/dir.tpl');
 const source = fs.readFileSync(tplPath, 'utf-8');
 const template = Handlebars.compile(source);
 
-module.exports = async function (req, res, filePath, config) {
+module.exports = async function (req, res, options) {
+  const { filePath, parse, config, proxy } = options;
+
+  console.log(`${chalk.greenBright(`[ ${req.method} ]`)}`, req.url);
+  // 处理存在代理情况
+  let isDone = !!proxy && handleProxy(req, res, options);
+  if (isDone) return;
+
   try {
     const stats = await stat(filePath);
     if (stats.isFile()) {
-      if (config.download) {  // 文件下载模式
+      if (config.download) {
+        // 文件下载模式
         const downloadConfig = createDownloadConfig({
           filename: filePath.split('\\').pop(),
           size: stats.size,
         });
-        Object.keys(downloadConfig).map(key => {
+        Object.keys(downloadConfig).map((key) => {
           res.setHeader(key, downloadConfig[key]);
         });
         fs.createReadStream(filePath).pipe(res);
         return;
       }
 
-      const contentType = mime.lookup(filePath);  // 获取文件类型识别
+      const contentType = mime.lookup(filePath); // 获取文件类型识别
       res.setHeader('Content-Type', `${contentType}; charset=utf-8`);
 
-      if (isFresh(stats, req, res)) {  // 是否有缓存
+      if (isFresh(stats, req, res)) {
+        // 是否有缓存
         res.statusCode = 304;
         res.end();
         return;
       }
 
+      // 请求返回文件，文档流形式
       let rs;
-      const { code, start, end } = range(stats.size, req, res);  // 判断是否断点续连，若否则 code = 200，start & end 为空
+      const { code, start, end } = range(stats.size, req, res); // 判断是否断点续连，若否则 code = 200，start & end 为空
 
       if (code === 200) {
         res.statusCode = 200;
-        rs = fs.createReadStream(filePath);  // 创建一个读取操作的数据流，用于大型文本文件
+        rs = fs.createReadStream(filePath); // 创建一个读取操作的数据流，用于大型文本文件
       } else {
         res.statusCode = 206;
         rs = fs.createReadStream(filePath, {
           start,
-          end
+          end,
         });
       }
 
@@ -61,7 +73,8 @@ module.exports = async function (req, res, filePath, config) {
         rs = compress(rs, req, res);
       }
       rs.pipe(res);
-    } else if (stats.isDirectory()) {  // 判断路径指向是否为文件目录，若无缓存则之间添加缓存
+    } else if (stats.isDirectory()) {
+      // 判断路径指向是否为文件目录，若无缓存则之间添加缓存
       const files = await readdir(filePath);
       res.statusCode = 200;
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
@@ -80,8 +93,8 @@ module.exports = async function (req, res, filePath, config) {
       const data = {
         files: fileData,
         title: path.basename(filePath),
-        dir: dir ? `/${dir}` : ''
-      }
+        dir: dir ? `/${dir}` : '',
+      };
       res.end(template(data));
     } else {
       throw Error();
@@ -91,4 +104,4 @@ module.exports = async function (req, res, filePath, config) {
     res.statusCode = 404;
     res.end(`${filePath} is not a directory or file! \n ${err}`);
   }
-}
+};

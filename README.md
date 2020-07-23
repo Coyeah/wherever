@@ -23,11 +23,21 @@ npm install wherever -g
 
 ```json
 {
-  "port": "number",
-  "main": "string",
-  "root": "string",
+  "port": 3000,
+  "main": "index.html",
+  "root": "./",
+  "proxy": {
+    "/api/": {
+      "target": "https://api.github.com/",
+      "pathRewrite": {
+        "^/api": ""
+      }
+    }
+  }
 }
 ```
+
++ 支持接口代理；
 
 ## If
 

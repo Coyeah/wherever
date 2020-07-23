@@ -1,21 +1,25 @@
 const { cache } = require('../config/wherever.default.config');
 
-function refreshRes (stats, res) {
+function refreshRes(stats, res) {
   const { maxAge, expires, cacheControl, lastModified, etag } = cache;
 
-  if (expires) {  // 服务器告诉浏览器缓存数据的过期时间
-    res.setHeader('Expires', (new Date(Date.now() + maxAge * 1000)).toUTCString());
+  if (expires) {
+    // 服务器告诉浏览器缓存数据的过期时间
+    res.setHeader('Expires', new Date(Date.now() + maxAge * 1000).toUTCString());
   }
 
-  if (cacheControl) {  // 服务器告诉浏览器一个过期的相对时间
+  if (cacheControl) {
+    // 服务器告诉浏览器一个过期的相对时间
     res.setHeader('Cache-Control', `public, max-age=${maxAge}`);
   }
 
-  if (lastModified) {  // 值为该文件的最近修改时间
+  if (lastModified) {
+    // 值为该文件的最近修改时间
     res.setHeader('Last-Modified', stats.mtime.toUTCString());
   }
 
-  if (etag) {  // 唯一标识符ETag
+  if (etag) {
+    // 唯一标识符ETag
     res.setHeader('ETag', `${stats.size}-${stats.mtime.toUTCString()}`);
   }
 }

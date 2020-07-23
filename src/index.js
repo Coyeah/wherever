@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const yargs = require('yargs');
 const Server = require('./server');
@@ -43,8 +43,7 @@ const argv = yargs
   })
   .alias('v', 'version')
   .version()
-  .help()
-  .argv;
+  .help().argv;
 
 const server = new Server(argv);
 server.start();

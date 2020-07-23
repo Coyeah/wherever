@@ -1,5 +1,5 @@
 module.exports = (totalSize, req, res) => {
-  const range = req.headers['range'];  // Range 断点续连
+  const range = req.headers['range']; // Range 断点续连
   if (!range) {
     return { code: 200 };
   }
@@ -19,6 +19,6 @@ module.exports = (totalSize, req, res) => {
   return {
     code: 206,
     start: parseInt(start),
-    end: parseInt(end)
+    end: parseInt(end),
   };
 };
