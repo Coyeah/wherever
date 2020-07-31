@@ -8,7 +8,6 @@ const readdir = promisify(fs.readdir); // fs.readdir 读取一个目录的内容
 
 const Handlebars = require('handlebars');
 const mime = require('mime-types');
-const chalk = require('chalk');
 
 const createDownloadConfig = require('./config/download.config');
 const range = require('./utils/range');
@@ -20,10 +19,9 @@ const tplPath = path.join(__dirname, './template/dir.tpl');
 const source = fs.readFileSync(tplPath, 'utf-8');
 const template = Handlebars.compile(source);
 
-module.exports = async function (req, res, options) {
+async function main(req, res, options) {
   const { filePath, parse, config, proxy } = options;
 
-  console.log(`${chalk.greenBright(`[ ${req.method} ]`)}`, req.url);
   // 处理存在代理情况
   let isDone = !!proxy && handleProxy(req, res, options);
   if (isDone) return;
@@ -100,8 +98,22 @@ module.exports = async function (req, res, options) {
       throw Error();
     }
   } catch (err) {
-    console.error(err);
-    res.statusCode = 404;
-    res.end(`${filePath} is not a directory or file! \n ${err}`);
+    if (
+      config.server &&
+      filePath !== 'index.html' &&
+      req.headers.accept.indexOf('text/html') >= 0 &&
+      req.method === 'GET'
+    ) {
+      main(req, res, {
+        ...options,
+        filePath: config.historyApiFallback,
+      });
+    } else {
+      console.error(err);
+      res.statusCode = 404;
+      res.end(`${filePath} is not a directory or file! \n ${err}`);
+    }
   }
-};
+}
+
+module.exports = main;

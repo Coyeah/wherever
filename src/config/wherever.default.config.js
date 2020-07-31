@@ -6,6 +6,7 @@ module.exports = {
   port: 3000,
   root: process.cwd(), // process.cwd() 当前Node.js进程执行时的工作目录
   compress: /\.(html|js|css|md)/,
+  historyApiFallback: 'index.html',
   cache: {
     maxAge: 600,
     expires: true,

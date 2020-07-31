@@ -20,10 +20,13 @@ class Server {
   start() {
     const server = http.createServer((req, res) => {
       const parse = url.parse(req.url);
-      let filePath = path.join(this.config.root, parse.pathname);
+      let filePath = parse.pathname;
       if (this.config.server) {
-        if (parse.pathname === '/') filePath = `${filePath}${this.config.main}`;
+        if (filePath === '/') filePath = `${filePath}${this.config.main}`;
       }
+      filePath = path.join(this.config.root, filePath);
+
+      console.log(`${chalk.greenBright(`[ ${req.method} ]`)}`, req.url);
       main(req, res, {
         ...this,
         filePath,
