@@ -1,8 +1,8 @@
 'use strict';
 
-const { createGzip, createDeflate } = require('zlib'); // zlib 模块提供通过 Gzip 和 Deflate/Inflate 实现的压缩功能
+import { createGzip, createDeflate } from 'zlib'; // zlib 模块提供通过 Gzip 和 Deflate/Inflate 实现的压缩功能
 
-module.exports = (rs, req, res) => {
+export default function compress(rs, req, res) {
   const acceptEncoding = req.headers['accept-encoding']; // 获取内容编码方式，即压缩算法
   if (!acceptEncoding || !acceptEncoding.match(/\b(gzip|deflate)\b/)) {
     // 无压缩方式

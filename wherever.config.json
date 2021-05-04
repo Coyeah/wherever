@@ -1,11 +1,11 @@
 {
   "port": 3000,
-  "main": "index.html",
   "root": "./",
   "historyApiFallback": "index.html",
   "proxy": {
-    "/api/": {
-      "target": "https://api.github.com/",
+    "/api": {
+      "target": "https://api.github.com",
+      "changeOrigin": true,
       "pathRewrite": {
         "^/api": ""
       }

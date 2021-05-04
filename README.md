@@ -7,28 +7,35 @@ Tiny NodeJS Static Web Server.
 ## 安装
 
 ```bash
-npm install wherever -g
+npm install -g wherever
 ```
 
-## 参数的使用
+## 使用
 
-+ -p, --port [string]: 指定端口号
-+ -r, --root [string]: 指定根目录
-+ -s, --server [boolean]: 静态资源服务器模式
-+ -o, --open [boolean]: 启动是否打开网页
-+ -d, --download [boolean]: 文件下载模式
-+ -c, --config [string]: 指定配置文件
+```text
+wherever [options]
+
+选项：
+  -p, --port     端口号                                    [数字] [默认值: 3000]
+  -r, --root     根目录                                  [字符串] [默认值: "./"]
+  -s, --server   静态资源服务器模式                       [布尔] [默认值: false]
+  -o, --open     打开网址                                 [布尔] [默认值: false]
+  -c, --config   配置文件
+      --version  显示版本号                                               [布尔]
+      --help     显示帮助信息                                             [布尔]
+```
 
 ## 配置文件格式
 
 ```json
 {
   "port": 3000,
-  "main": "index.html",
   "root": "./",
+  "historyApiFallback": "index.html",
   "proxy": {
-    "/api/": {
-      "target": "https://api.github.com/",
+    "/api": {
+      "target": "https://api.github.com",
+      "changeOrigin": true,
       "pathRewrite": {
         "^/api": ""
       }
@@ -38,9 +45,3 @@ npm install wherever -g
 ```
 
 + 支持接口代理；
-
-## If
-
-如果你喜欢，请给我一个小小的支持，为我的项目给个星星。 Star it >> [ [github project](https://github.com/Coyeah/wherever) ]
-
-如果有任何问题，感谢指出， [issue](https://github.com/Coyeah/wherever/issues)。

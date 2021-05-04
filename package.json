@@ -1,26 +1,19 @@
 {
   "name": "wherever",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "description": "Tiny nodejs web server",
-  "main": "app.js",
   "bin": {
-    "wherever": "bin/wherever"
+    "wherever": "bin/index.js"
   },
+  "main": "lib/index",
+  "files": [
+    "lib/**/*",
+    "bin/**/*"
+  ],
   "scripts": {
-    "prettier": "node ./scripts/prettier.js",
-    "lint-staged": "lint-staged",
-    "precommit": "npm run lint-staged"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged --ignore-path=.prettierignore"
-    }
-  },
-  "lint-staged": {
-    "**/*.{js,ts,tsx,json,jsx,less}": [
-      "node ./scripts/prettier.js",
-      "git add ."
-    ]
+    "clean": "rimraf lib",
+    "tpl": "node_modules/.bin/cpr src/template lib",
+    "build": "npm run clean && node_modules/.bin/rollup --config rollup.config.js && npm run tpl"
   },
   "repository": {
     "type": "git",
@@ -32,28 +25,24 @@
     "nodejs",
     "web_server"
   ],
-  "author": {
-    "name": "Coyeah",
-    "github": "https://github.com/Coyeah",
-    "email": "Coyeah_chen@outlook.com"
-  },
+  "author": "coyeah <Coyeah_chen@outlook.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Coyeah/wherever/issues"
   },
   "homepage": "https://github.com/Coyeah/wherever#readme",
   "dependencies": {
-    "chalk": "^4.1.0",
-    "handlebars": "^4.7.6",
-    "http-proxy": "^1.18.1",
-    "mime-types": "^2.1.27",
-    "yargs": "^15.4.1"
+    "chalk": "^4.1.1",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "http-proxy-middleware": "^1.3.1",
+    "mime-types": "^2.1.30",
+    "yargs": "^17.0.1"
   },
   "devDependencies": {
-    "eslint": "^7.5.0",
-    "husky": "^4.2.5",
-    "lint-staged": "^10.2.11",
-    "prettier": "^2.0.5",
-    "pretty-quick": "^2.0.1"
+    "cpr": "^3.0.1",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.47.0",
+    "rollup-plugin-terser": "^7.0.2"
   }
 }

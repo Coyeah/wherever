@@ -1,4 +1,4 @@
-module.exports = (totalSize, req, res) => {
+export default function range (totalSize, req, res) {
   const range = req.headers['range']; // Range 断点续连
   if (!range) {
     return { code: 200 };
