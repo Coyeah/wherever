@@ -109,7 +109,7 @@ class Server {
             server,
         } = this.config;
 
-        if (proxy.toString() === '[object Object]') {
+        if (proxy && proxy.toString() === '[object Object]') {
             Object.keys(proxy).map(key => {
                 this.app.use(key, createProxyMiddleware(proxy[key].target, proxy[key]));
             });

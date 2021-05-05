@@ -1,8 +1,10 @@
 # wherever
 
-Tiny NodeJS Static Web Server.
 
-一个微型静态服务器（基于 NodeJS 原生）。
+[![npm version](https://badge.fury.io/js/wherever.svg)](https://badge.fury.io/js/wherever)
+[![npm downloads](https://img.shields.io/npm/dm/wherever.svg?style=flat-square)](http://npm-stat.com/charts.html?package=wherever)
+
+Tiny static web server.
 
 ## 安装
 
@@ -11,6 +13,10 @@ npm install -g wherever
 ```
 
 ## 使用
+
+```bash
+wherever --help
+```
 
 ```text
 wherever [options]
