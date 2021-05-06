@@ -12,10 +12,6 @@
     body {
       font-size: 16px;
       position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
       height: 100%;
       width: 100%;
       min-width: 600px;
@@ -105,7 +101,7 @@
     <% files.forEach(function(item){ %>
       <div class="box">
         <%- item.icon %>
-        <a href="<%- item.path %>"><%- item.file %></a>
+        <a href="<%- item.path %>"><%- item.filename %></a>
       </div>
     <% }); %>
   </div>

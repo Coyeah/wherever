@@ -1,5 +1,5 @@
-export default function range (totalSize, req, res) {
-  const range = req.headers['range']; // Range 断点续连
+export default function range(totalSize, req, res) {
+  const range = req.headers["range"]; // Range 断点续连
   if (!range) {
     return { code: 200 };
   }
@@ -13,12 +13,12 @@ export default function range (totalSize, req, res) {
     return { code: 200 };
   }
 
-  res.setHeader('Accept-Rangs', 'bytes');
-  res.setHeader('Content-Type', `bytes ${start}-${end}/${totalSize}`);
-  res.setHeader('Content-Length', end - start);
+  res.setHeader("Accept-Rangs", "bytes");
+  res.setHeader("Content-Type", `bytes ${start}-${end}/${totalSize}`);
+  res.setHeader("Content-Length", end - start);
   return {
     code: 206,
     start: parseInt(start),
     end: parseInt(end),
   };
-};
+}

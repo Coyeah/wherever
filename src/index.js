@@ -2,7 +2,7 @@
 
 import yargs from "yargs";
 import { defaultConfig } from "./common/config";
-import Server from './server';
+import Server from "./main";
 
 const argv = yargs
     .usage("wherever [options]")
@@ -26,7 +26,7 @@ const argv = yargs
     })
     .option("o", {
         alias: "open",
-        describe: "打开网址",
+        describe: "打开网页",
         type: "boolean",
         default: false,
     })

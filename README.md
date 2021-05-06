@@ -25,7 +25,7 @@ wherever [options]
   -p, --port     端口号                                    [数字] [默认值: 3000]
   -r, --root     根目录                                  [字符串] [默认值: "./"]
   -s, --server   静态资源服务器模式                       [布尔] [默认值: false]
-  -o, --open     打开网址                                 [布尔] [默认值: false]
+  -o, --open     打开网页                                 [布尔] [默认值: false]
   -c, --config   配置文件
       --version  显示版本号                                               [布尔]
       --help     显示帮助信息                                             [布尔]
