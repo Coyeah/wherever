@@ -1,10 +1,6 @@
 // rollup.config.js
-module.exports = {
-    input: "src/index.js",
-    output: {
-        file: "lib/index.js",
-        format: "cjs",
-    },
+
+const commonObject = {
     plugins: [require("rollup-plugin-terser").terser()],
     external: [
         "yargs",
@@ -19,4 +15,23 @@ module.exports = {
         "child_process",
         "zlib",
     ],
-};
+}
+
+module.exports = [{
+    input: "src/main.js",
+    output: {
+        file: "lib/main.js",
+        format: "cjs",
+        exports: "auto"
+    },
+    ...commonObject,
+}, {
+
+    input: "src/argv.js",
+    output: {
+        file: "lib/argv.js",
+        format: "cjs",
+        exports: "auto"
+    },
+    ...commonObject,
+}];

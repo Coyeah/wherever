@@ -12,8 +12,9 @@
   ],
   "scripts": {
     "clean": "rimraf lib",
-    "tpl": "node_modules/.bin/cpr src/template lib",
-    "build": "npm run clean && node_modules/.bin/rollup --config rollup.config.js && npm run tpl"
+    "cpr": "node_modules/.bin/cpr static lib",
+    "build": "npm run clean && node_modules/.bin/rollup --config rollup.config.js && npm run cpr",
+    "start": "node bin/index.js"
   },
   "repository": {
     "type": "git",

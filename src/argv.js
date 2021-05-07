@@ -2,7 +2,6 @@
 
 import yargs from "yargs";
 import { defaultConfig } from "./common/config";
-import Server from "./main";
 
 const argv = yargs
     .usage("wherever [options]")
@@ -37,7 +36,4 @@ const argv = yargs
     .version()
     .help().argv;
 
-(function () {
-    const s = new Server(argv);
-    s.start();
-})();
+export default argv;
