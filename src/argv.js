@@ -3,7 +3,7 @@
 import yargs from "yargs";
 import { defaultConfig } from "./common/config";
 
-const argv = yargs
+export default () => yargs
     .usage("wherever [options]")
     .option("p", {
         alias: "port",
@@ -35,5 +35,3 @@ const argv = yargs
     })
     .version()
     .help().argv;
-
-export default argv;

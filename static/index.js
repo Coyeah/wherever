@@ -1,10 +1,11 @@
 "use strict";
 
-const argv = require("./argv");
+const getArgv = require("./argv");
 const Server = require("./main");
 
 (function () {
-    const s = new Server(argv);
+    // const argv = getArgv();
+    const s = new Server();
     s.start();
 })();
 

@@ -15,8 +15,14 @@ import range from "./utils/range";
 import compress from "./utils/compress";
 
 export default class Server {
-    constructor(argv) {
-        const { port, root, config: configRoot, open, server } = argv;
+    constructor(argv = {}) {
+        const { 
+            port = defaultConfig.port, 
+            root = defaultConfig.root, 
+            config: configRoot, 
+            open = false, 
+            server = false 
+        } = argv;
         const customConfig = readJsonFile(configRoot);
 
         this.config = Object.assign(
