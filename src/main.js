@@ -15,6 +15,8 @@ import range from "./utils/range";
 import compress from "./utils/compress";
 
 export default class Server {
+    static defaultConfig = defaultConfig;
+
     constructor(argv = {}) {
         const { 
             port = defaultConfig.port, 
@@ -39,6 +41,7 @@ export default class Server {
         this.config.absoluteRoot = path.resolve(CWD, this.config.root);
         this.app = express();
     }
+
     start() {
         this.reqLog();
         this.proxyHandler();
@@ -46,6 +49,7 @@ export default class Server {
         // this.methodPost();
         this.listen();
     }
+
     reqLog() {
         this.app.use(function (req, res, next) {
             console.info(
@@ -56,6 +60,7 @@ export default class Server {
             next();
         });
     }
+
     proxyHandler() {
         const { proxy } = this.config;
         if (proxy && proxy.toString() === "[object Object]") {
@@ -67,6 +72,7 @@ export default class Server {
             })
         }
     }
+
     fileHandler(req, res, params) {
         const { targetPath, stat } = params;
         const contentType = mime.lookup(targetPath) || "text/plain"; // 获取文件类型识别
@@ -96,10 +102,12 @@ export default class Server {
         }
         rs.pipe(res);
     }
+
     notFound(res) {
         res.statusCode = 404;
         res.end();
     }
+
     listen() {
         this.app.listen(this.config.port, () => {
             const addr = `http://${this.config.hostname}:${this.config.port}`;
@@ -120,6 +128,7 @@ export default class Server {
             if (this.config.open) openUrl(addr);
         });
     }
+
     getStat(targetPath) {
         return new Promise((resolve, reject) => {
             const res = tryTo(() => fs.statSync(targetPath), null);
@@ -130,6 +139,7 @@ export default class Server {
             }
         });
     }
+
     getFolderList(targetPath) {
         const _dirList = fs.readdirSync(targetPath);
         const dirList = [];
@@ -148,6 +158,7 @@ export default class Server {
                 isDirectory: stat.isDirectory(),
             })));
     }
+
     methodGet() {
         const { absoluteRoot, server, historyApiFallback } = this.config;
         this.app.get("*", (req, res) => {
@@ -218,6 +229,7 @@ export default class Server {
                 });
         });
     }
+    
     // methodPost() {
     //     const { absoluteRoot } = this.config;
     //     this.app.post("*", (req, res) => {

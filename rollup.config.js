@@ -15,23 +15,14 @@ const commonObject = {
         "child_process",
         "zlib",
     ],
-}
+};
 
-module.exports = [{
+module.exports = {
     input: "src/main.js",
     output: {
-        file: "lib/main.js",
+        file: "lib/Server.js",
         format: "cjs",
         exports: "auto"
     },
     ...commonObject,
-}, {
-
-    input: "src/argv.js",
-    output: {
-        file: "lib/argv.js",
-        format: "cjs",
-        exports: "auto"
-    },
-    ...commonObject,
-}];
+};
