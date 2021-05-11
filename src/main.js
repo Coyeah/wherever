@@ -17,15 +17,20 @@ import compress from "./utils/compress";
 export default class Server {
     static defaultConfig = defaultConfig;
 
-    constructor(argv = {}) {
-        const { 
-            port = defaultConfig.port, 
-            root = defaultConfig.root, 
-            config: configRoot, 
-            open = false, 
-            server = false 
+    errorHandler = () => {};
+
+    constructor(argv = {}, isYargs = false) {
+        const {
+            port = defaultConfig.port,
+            root = defaultConfig.root,
+            config: configRoot,
+            open = false,
+            server = false,
         } = argv;
         const customConfig = readJsonFile(configRoot);
+
+        this.isYargs = isYargs;
+        this.app = express();
 
         this.config = Object.assign(
             {},
@@ -39,18 +44,21 @@ export default class Server {
             customConfig
         );
         this.config.absoluteRoot = path.resolve(CWD, this.config.root);
-        this.app = express();
     }
 
-    start() {
+    start(cb) {
         this.reqLog();
         this.proxyHandler();
         this.methodGet();
-        // this.methodPost();
-        this.listen();
+        this.listen(cb);
+    }
+
+    onError(cb) {
+        this.errorHandler = cb;
     }
 
     reqLog() {
+        if (!this.isYargs) return;
         this.app.use(function (req, res, next) {
             console.info(
                 chalk.whiteBright("[wherever]"),
@@ -108,24 +116,27 @@ export default class Server {
         res.end();
     }
 
-    listen() {
+    listen(cb) {
         this.app.listen(this.config.port, () => {
             const addr = `http://${this.config.hostname}:${this.config.port}`;
             const local = `http://localhost:${this.config.port}`;
 
-            console.info();
-            console.info(
-                chalk.whiteBright("[wherever]"),
-                "|",
-                `Server started at ${chalk.green(addr)}`
-            );
-            console.info(
-                "          ",
-                "|",
-                `Server started at ${chalk.green(local)}`
-            );
-            console.info();
             if (this.config.open) openUrl(addr);
+            if (this.isYargs) {
+                console.info();
+                console.info(
+                    chalk.whiteBright("[wherever]"),
+                    "|",
+                    `Server started at ${chalk.green(addr)}`
+                );
+                console.info(
+                    "          ",
+                    "|",
+                    `Server started at ${chalk.green(local)}`
+                );
+                console.info();
+            }
+            cb && cb();
         });
     }
 
@@ -220,16 +231,19 @@ export default class Server {
                 })
                 .catch((e) => {
                     if (e instanceof Error) {
-                        console.error(
-                            chalk.redBright("[wherever]"),
-                            e.name + ": ", e.message
-                        );
+                        this.errorHandler(e);
+                        if (this.isYargs) {
+                            console.error(
+                                chalk.redBright("[wherever]"),
+                                e.name + ": ", e.message
+                            );
+                        }
                     }
                     this.notFound(res);
                 });
         });
     }
-    
+
     // methodPost() {
     //     const { absoluteRoot } = this.config;
     //     this.app.post("*", (req, res) => {

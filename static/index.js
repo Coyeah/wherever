@@ -12,7 +12,7 @@ const argv = require("yargs")
     })
     .option("r", {
         alias: "root",
-        describe: "根目录",
+        describe: "根目录（相对路径）",
         type: "string",
         default: Server.defaultConfig.root,
     })
@@ -36,7 +36,7 @@ const argv = require("yargs")
     .help().argv;
 
 (function () {
-    const s = new Server(argv);
+    const s = new Server(argv, true);
     s.start();
 })();
 
