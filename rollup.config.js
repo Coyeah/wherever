@@ -1,9 +1,13 @@
 // rollup.config.js
-
-const commonObject = {
+module.exports = {
+    input: "src/Server.js",
+    output: {
+        file: "lib/Server.js",
+        format: "cjs",
+        exports: "auto"
+    },
     plugins: [require("rollup-plugin-terser").terser()],
     external: [
-        "yargs",
         "fs",
         "path",
         "chalk",
@@ -15,14 +19,4 @@ const commonObject = {
         "child_process",
         "zlib",
     ],
-};
-
-module.exports = {
-    input: "src/main.js",
-    output: {
-        file: "lib/Server.js",
-        format: "cjs",
-        exports: "auto"
-    },
-    ...commonObject,
 };

@@ -3,12 +3,11 @@ import fs from "fs";
 
 import express from "express";
 import chalk from "chalk";
-import ejs from "ejs";
 import mime from "mime-types";
 import { createProxyMiddleware } from "http-proxy-middleware";
 
 import icon from "./common/icon";
-import { CWD, defaultConfig, template } from "./common/config";
+import { CWD, defaultConfig, getDirHtml } from "./common/config";
 import { readJsonFile, tryTo, openUrl } from "./utils/tools";
 import { isFresh } from "./utils/cache";
 import range from "./utils/range";
@@ -17,9 +16,7 @@ import compress from "./utils/compress";
 export default class Server {
     static defaultConfig = defaultConfig;
 
-    errorHandler = () => {};
-
-    constructor(argv = {}, isYargs = false) {
+    constructor(argv = {}) {
         const {
             port = defaultConfig.port,
             root = defaultConfig.root,
@@ -29,9 +26,7 @@ export default class Server {
         } = argv;
         const customConfig = readJsonFile(configRoot);
 
-        this.isYargs = isYargs;
         this.app = express();
-
         this.config = Object.assign(
             {},
             defaultConfig,
@@ -53,12 +48,7 @@ export default class Server {
         this.listen(cb);
     }
 
-    onError(cb) {
-        this.errorHandler = cb;
-    }
-
     reqLog() {
-        if (!this.isYargs) return;
         this.app.use(function (req, res, next) {
             console.info(
                 chalk.whiteBright("[wherever]"),
@@ -72,12 +62,9 @@ export default class Server {
     proxyHandler() {
         const { proxy } = this.config;
         if (proxy && proxy.toString() === "[object Object]") {
-            Object.keys(proxy).map(key => {
-                this.app.use(
-                    key,
-                    createProxyMiddleware(proxy[key].target, proxy[key])
-                );
-            })
+            Object.keys(proxy).map((key) => {
+                this.app.use(key, createProxyMiddleware(proxy[key].target, proxy[key]));
+            });
         }
     }
 
@@ -116,27 +103,24 @@ export default class Server {
         res.end();
     }
 
-    listen(cb) {
+    listen() {
         this.app.listen(this.config.port, () => {
             const addr = `http://${this.config.hostname}:${this.config.port}`;
             const local = `http://localhost:${this.config.port}`;
 
             if (this.config.open) openUrl(addr);
-            if (this.isYargs) {
-                console.info();
-                console.info(
-                    chalk.whiteBright("[wherever]"),
-                    "|",
-                    `Server started at ${chalk.green(addr)}`
-                );
-                console.info(
-                    "          ",
-                    "|",
-                    `Server started at ${chalk.green(local)}`
-                );
-                console.info();
-            }
-            cb && cb();
+            console.info();
+            console.info(
+                chalk.whiteBright("[wherever]"),
+                "|",
+                `Server started at ${chalk.green(addr)}`
+            );
+            console.info(
+                "          ",
+                "|",
+                `Server started at ${chalk.green(local)}`
+            );
+            console.info();
         });
     }
 
@@ -156,18 +140,18 @@ export default class Server {
         const dirList = [];
         for (let value of _dirList) {
             dirList.push(
-                this
-                    .getStat(path.join(targetPath, value))
-                    .then(stat => [stat, value])
+                this.getStat(path.join(targetPath, value)).then((stat) => [stat, value])
             );
         }
-        return Promise
-            .all(dirList)
-            .then(list => list.filter(i => !!i).map(([stat, value]) => ({
-                filename: value,
-                isFile: stat.isFile(),
-                isDirectory: stat.isDirectory(),
-            })));
+        return Promise.all(dirList).then((list) =>
+            list
+                .filter((i) => !!i)
+                .map(([stat, value]) => ({
+                    filename: value,
+                    isFile: stat.isFile(),
+                    isDirectory: stat.isDirectory(),
+                }))
+        );
     }
 
     methodGet() {
@@ -183,86 +167,67 @@ export default class Server {
                         });
                     } else if (!server && stat.isDirectory()) {
                         const dir = path.relative(absoluteRoot, currentPath);
-                        const data = [{
-                            filename: "/",
-                            path: "/",
-                            icon: icon.back,
-                        }];
+                        const data = [
+                            {
+                                filename: "/",
+                                path: "/",
+                                icon: icon.back,
+                            },
+                        ];
                         if (dir) {
                             data.push({
                                 filename: "../",
                                 path:
-                                    "/" + path.relative(absoluteRoot, path.resolve(currentPath, "../")),
+                                    "/" +
+                                    path.relative(absoluteRoot, path.resolve(currentPath, "../")),
                                 icon: icon.back,
-                            })
+                            });
                         }
 
-                        return this.getFolderList(currentPath)
-                            .then((folderList) => {
-
-                                const files = data;
-                                folderList.forEach(i => {
-                                    i.path = `${dir ? `/${dir}` : ""}/${i.filename}`;
-                                    i.icon = i.isFile ? icon.file : icon.folder;
-                                    files.push(i);
-                                });
-
-                                res.statusCode = 200;
-                                res.setHeader("Content-Type", "text/html; charset=utf-8");
-                                res.end(
-                                    ejs.render(template, {
-                                        files,
-                                        title: "/" + dir,
-                                    })
-                                );
+                        return this.getFolderList(currentPath).then((folderList) => {
+                            const files = data;
+                            folderList.forEach((i) => {
+                                i.path = `${dir ? `/${dir}` : ""}/${i.filename}`;
+                                i.icon = i.isFile ? icon.file : icon.folder;
+                                files.push(i);
                             });
+
+                            res.statusCode = 200;
+                            res.setHeader("Content-Type", "text/html; charset=utf-8");
+                            res.end(
+                                getDirHtml({
+                                    files,
+                                    title: "/" + dir,
+                                })
+                            );
+                        });
                     } else if (server && stat.isDirectory()) {
                         // 服务器模式，404 情况跳转到默认页面；
-                        const defaultServerPath = path.resolve(absoluteRoot, historyApiFallback);
-                        return this.getStat(defaultServerPath).then(s => {
-                            s.isFile() && this.fileHandler(req, res, {
-                                targetPath: defaultServerPath,
-                                stat: s,
-                            });
-                        })
+                        const defaultServerPath = path.resolve(
+                            absoluteRoot,
+                            historyApiFallback
+                        );
+                        return this.getStat(defaultServerPath).then((s) => {
+                            s.isFile() &&
+                                this.fileHandler(req, res, {
+                                    targetPath: defaultServerPath,
+                                    stat: s,
+                                });
+                        });
                     }
 
                     return Promise.reject();
                 })
                 .catch((e) => {
                     if (e instanceof Error) {
-                        this.errorHandler(e);
-                        if (this.isYargs) {
-                            console.error(
-                                chalk.redBright("[wherever]"),
-                                e.name + ": ", e.message
-                            );
-                        }
+                        console.error(
+                            chalk.redBright("[wherever]"),
+                            e.name + ": ",
+                            e.message
+                        );
                     }
                     this.notFound(res);
                 });
         });
     }
-
-    // methodPost() {
-    //     const { absoluteRoot } = this.config;
-    //     this.app.post("*", (req, res) => {
-    //         const currentPath = path.resolve(absoluteRoot, req.url.slice(1));
-    //         this.getStat(currentPath)
-    //             .then(stat => {
-    //                 if (stat.isDirectory()) {
-    //                     return this.getFolderList(currentPath).then(list => {
-    //                         res.send(list);
-    //                         res.statusCode = 200;
-    //                         res.setHeader("Content-Type", "application/json; charset=utf-8");
-    //                         res.end();
-    //                     });
-    //                 }
-    //                 return Promise.reject();
-    //             })
-    //             .catch(() => {
-    //                 this.notFound(res);
-    //             });
-    //     });
-    // }
 }

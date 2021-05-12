@@ -1,5 +1,6 @@
-import path from "path";
 import { readFileSync } from "fs";
+import path from "path";
+import ejs from "ejs";
 import getIpAdress from "../utils/ipAdress";
 
 export const defaultConfig = {
@@ -17,3 +18,5 @@ export const template = readFileSync(
     path.join(__dirname, "./dir.ejs"),
     "utf-8"
 );
+
+export const getDirHtml = data => ejs.render(template, data);
